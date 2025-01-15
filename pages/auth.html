@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase Authentication</title>
+  </head>
+  <body>
+    <h1>Вхід та Реєстрація</h1>
+    <div id="registration">
+      <h2>Реєстрація</h2>
+      <input type="email" id="email" placeholder="Електронна пошта" required />
+      <input type="password" id="password" placeholder="Пароль" required />
+      <div>
+        <label
+          ><input type="radio" name="role" value="teahcer" required />
+          Вчитель</label
+        >
+        <label
+          ><input type="radio" name="role" value="student" required />
+          Учень</label
+        >
+      </div>
+      <button id="emailSignUpBtn">Зареєструватися</button>
+    </div>
+    <div id="login">
+      <h2>Вхід</h2>
+      <input
+        type="email"
+        id="emailLogin"
+        placeholder="Електронна пошта"
+        required
+      />
+      <input type="password" id="passwordLogin" placeholder="Пароль" required />
+      <button id="emailSignInBtn">Увійти</button>
+      <button id="googleSignInBtn">Увійти через Google</button>
+    </div>
+    <script defer type="module" src="../js/auth.js"></script>
+  </body>
+</html>

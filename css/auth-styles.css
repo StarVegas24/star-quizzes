@@ -1,0 +1,16 @@
+input {
+  font-size: inherit;
+  padding: 4px 8px;
+}
+
+button {
+  font-size: inherit;
+  padding: 8px 16px;
+}
+
+.section {
+  max-width: 1920px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px;
+}
