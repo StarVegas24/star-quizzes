@@ -36,12 +36,14 @@ async function loadTest(testId) {
           console.log("Питання:", question); // Додано журнал налагодження
           const questionElement = document.createElement("div");
           questionElement.className = "question";
-          questionElement.innerHTML = ` <h4>${
+          questionElement.innerHTML = ` <h4 class="question">${
             question.text
           }</h4> ${question.options
             .map(
               (option, index) =>
-                ` <p> <label> <input type="checkbox" name="question-${questionId}" value="${option.text}"> ${option.text} </label> </p> `
+                ` <p class="checkbox-container">
+              <input id="question-${questionId}" type="checkbox" name="question-${questionId}" value="${option.text}">
+              <label for="question-${questionId}">  ${option.text} </label></p> `
             )
             .join("")} `;
           questionsContainer.appendChild(questionElement);

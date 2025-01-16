@@ -1,1 +1,4 @@
-@import url(./css/basic-styles.css);
+@import url("./css/basic-styles.css");
+@import url("./css/auth-styles.css");
+@import url("./css/test-styles.css");
+@import url("./css/result.css");

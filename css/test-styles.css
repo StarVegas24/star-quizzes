@@ -1,0 +1,15 @@
+.option {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+.var-label {
+  width: 10em;
+}
+
+.question {
+  text-align: left;
+  font-size: 20px;
+}

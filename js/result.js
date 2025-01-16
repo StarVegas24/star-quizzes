@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTestResults(testId);
     document.getElementById(
       "testLink"
-    ).innerHTML = `<a href="test.html?testId=${testId}">Перейти до тестування</a>`;
+    ).innerHTML = `<a class="button" href="test.html?testId=${testId}">Перейти до тестування</a>`;
   } else {
     alert("Параметр тесту не вказаний.");
   }

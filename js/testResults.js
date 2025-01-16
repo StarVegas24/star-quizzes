@@ -37,7 +37,7 @@ async function loadTests(uid) {
       if (test.teacherId === uid) {
         const testElement = document.createElement("div");
         testElement.className = "test";
-        testElement.innerHTML = ` <h3>Тест ID: ${doc.id}</h3> <a href="result.html?testId=${doc.id}">Переглянути результати</a> <button onclick="deleteTest('${doc.id}')">Видалити</button> `;
+        testElement.innerHTML = `<div class="test-div"><a class="test-link" href="result.html?testId=${doc.id}">Переглянути результати тесту з ID: ${doc.id}</a> <button onclick="deleteTest('${doc.id}')">Видалити</button> </div>`;
         testsContainer.appendChild(testElement);
       }
     });

@@ -23,18 +23,25 @@ async function loadQuestions(uid, folderId) {
     const question = doc.data();
     const questionElement = document.createElement("div");
     questionElement.className = "question";
-    questionElement.innerHTML = ` <h4>${question.text}</h4> ${question.options
+    questionElement.innerHTML = ` <h4 class="question">${
+      question.text
+    }</h4> ${question.options
       .map(
         (option, index) =>
-          ` <p> <label> <input type="checkbox" ${
-            option.correct ? "checked" : ""
-          } disabled> ${option.text} </label> </p> `
+          ` <p><div class="checkbox-container"> 
+        <input type="checkbox" ${option.correct ? "checked" : ""} disabled> 
+           <label for="${question.uid}${index}">  ${
+            option.text
+          } </label></div> </p> `
       )
       .join("")} <p>Клас: ${question.class}</p> <p>Складність: ${
       question.difficulty
-    }</p> <input type="checkbox" class="select-question" value="${
+    }</p><div class="option"> <input type="checkbox" class="select-question" id="question${
       doc.id
-    }"> Обрати для тестування `;
+    }" value="${doc.id}"> <label for="question${
+      doc.id
+    }"><b>Обрати для тестування </b></label> </div>`;
+    questionElement.style.marginBottom = "24px";
     questionsContainer.appendChild(questionElement);
   });
 }

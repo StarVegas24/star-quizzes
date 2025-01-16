@@ -1,0 +1,48 @@
+.folder-link {
+  display: block;
+  border: 1px solid #5900ad;
+  border-radius: 12px;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.test-link {
+  display: flex;
+  width: 100%;
+  border: 1px solid #5900ad;
+  border-radius: 12px;
+  padding: 12px 12px;
+  align-items: center;
+  justify-content: stretch;
+}
+
+.test-div {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: stretch;
+}
+
+td,
+th {
+  box-sizing: border-box;
+  padding: 12px 24px;
+}
+
+.button {
+  box-sizing: border-box;
+  cursor: pointer;
+  display: block;
+  font-size: inherit;
+  padding: 12px 24px;
+  margin-bottom: 12px;
+  color: white;
+  background-color: #5900ad;
+  border: none;
+  border-radius: 8px;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 12px;
+}

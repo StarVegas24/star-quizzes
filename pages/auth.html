@@ -8,23 +8,35 @@
   </head>
   <body>
     <h1>Вхід та Реєстрація</h1>
-    <div id="registration">
+    <div class="form" id="registration">
       <h2>Реєстрація</h2>
       <input type="email" id="email" placeholder="Електронна пошта" required />
       <input type="password" id="password" placeholder="Пароль" required />
       <div>
-        <label
-          ><input type="radio" name="role" value="teacher" required />
-          Вчитель</label
-        >
-        <label
-          ><input type="radio" name="role" value="student" required />
-          Учень</label
-        >
+        <div class="checkbox-container">
+          <input
+            type="radio"
+            name="role"
+            value="teacher"
+            required
+            id="teacher"
+          />
+          <label for="teacher"> Вчитель</label>
+        </div>
+        <div class="checkbox-container">
+          <input
+            type="radio"
+            name="role"
+            value="student"
+            required
+            id="student"
+          />
+          <label for="student"> Учень</label>
+        </div>
       </div>
       <button id="emailSignUpBtn">Зареєструватися</button>
     </div>
-    <div id="login">
+    <div class="form" id="login">
       <h2>Вхід</h2>
       <input
         type="email"
@@ -34,6 +46,7 @@
       />
       <input type="password" id="passwordLogin" placeholder="Пароль" required />
       <button id="emailSignInBtn">Увійти</button>
+      <h5>Aбо</h5>
       <button id="googleSignInBtn">Увійти через Google</button>
     </div>
     <script defer type="module" src="../js/auth.js"></script>

@@ -8,35 +8,36 @@
   </head>
   <body>
     <h2>Створення Питань</h2>
-    <div>
-      <label for="folder">Папка:</label>
-      <input type="text" id="folder" required />
-    </div>
-    <div>
-      <label for="class">Клас:</label>
-      <input type="text" id="class" required />
-    </div>
-    <div>
-      <label for="difficulty">Рівень складності:</label>
-      <select id="difficulty" required>
-        <option value="easy">Легкий</option>
-        <option value="medium">Середній</option>
-        <option value="hard">Складний</option>
-      </select>
-    </div>
-    <div>
-      <label for="questionText">Питання:</label>
-      <textarea id="questionText" required></textarea>
-    </div>
-    <div>
-      <label for="questionType">Тип питання:</label>
-      <select id="questionType" required>
-        <option value="undefined" disabled>Обрати</option>
-        <option value="oneCorrect">З однією правильною відповіддю</option>
-        <option value="multipleCorrect">
-          З кількома правильними відповідями
-        </option>
-        <!-- <option value="matching">Встановлення відповідності</option>
+    <div class="form">
+      <div>
+        <label for="folder">Папка:</label>
+        <input type="text" id="folder" required />
+      </div>
+      <div>
+        <label for="class">Клас:</label>
+        <input type="text" id="class" required />
+      </div>
+      <div>
+        <label for="difficulty">Рівень складності:</label>
+        <select id="difficulty" required>
+          <option value="easy">Легкий</option>
+          <option value="medium">Середній</option>
+          <option value="hard">Складний</option>
+        </select>
+      </div>
+      <div>
+        <label for="questionText">Питання:</label>
+        <textarea id="questionText" required></textarea>
+      </div>
+      <div>
+        <label for="questionType">Тип питання:</label>
+        <select id="questionType" required>
+          <option value="undefined" disabled checked>Обрати</option>
+          <option value="oneCorrect">З однією правильною відповіддю</option>
+          <option value="multipleCorrect">
+            З кількома правильними відповідями
+          </option>
+          <!-- <option value="matching">Встановлення відповідності</option>
         <option value="shortAnswer">Коротка відповідь</option>
         <option value="longAnswer">Довга відповідь</option>
         <option value="fillInTheBlanks">Заповнення пропусків</option>
@@ -46,15 +47,12 @@
         <option value="filvords">Філворди</option>
         <option value="reversedWords">Перевернуті слова</option>
         <option value="textWithoutSpaces">Текст без пропусків</option> -->
-      </select>
+        </select>
+      </div>
+      <div id="optionsContainer"></div>
+      <button id="addQuestionBtn">Додати питання</button>
+      <!-- <button type="reset">Очистити</button> -->
     </div>
-    <div id="optionsContainer"></div>
-    <!-- <div>
-      <label for="manualCheck">Потрібна ручна перевірка:</label>
-      <input type="checkbox" id="manualCheck" />
-    </div> -->
-    <button id="addQuestionBtn">Додати питання</button>
-    <button type="reset">Очистити</button>
     <script type="module" src="../js/addTest.js"></script>
   </body>
 </html>

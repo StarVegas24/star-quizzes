@@ -65,41 +65,30 @@ function handleAddQuestion() {
     difficulty: difficulty,
     options: [], // Додаткові поля для варіантів відповідей в залежності від типу питання
   };
+  console.log(question);
 
   // Додавання додаткових варіантів відповідей в залежності від типу питання
   if (questionType === "oneCorrect" || questionType === "multipleCorrect") {
     const options = document.getElementsByClassName("option");
     for (const option of options) {
+      if (option.value == undefined) {
+        continue;
+      }
       question.options.push({
         text: option.value,
         correct: option.dataset.correct === "true",
       });
     }
   }
-  addQuestion(question);
-}
 
-// function handleAddQuestion() {
-//   const questionType = document.getElementById("questionType").value;
-//   const question = {
-//     text: document.getElementById("questionText").value,
-//     type: questionType,
-//     folder: document.getElementById("folder").value,
-//     class: document.getElementById("class").value,
-//     difficulty: document.getElementById("difficulty").value,
-//     options: [],
-//   };
-//   if (questionType === "oneCorrect" || questionType === "multipleCorrect") {
-//     const options = document.getElementsByClassName("option");
-//     for (const option of options) {
-//       question.options.push({
-//         text: option.value,
-//         correct: option.dataset.correct === "true",
-//       });
-//     }
-//   }
-//   addQuestion(question);
-// }
+  addQuestion(question);
+  document.getElementById("questionText").value = "";
+  document.getElementById("questionType").value = undefined;
+  document.getElementById("class").value = "";
+  document.getElementById("folder").value = "";
+  document.getElementById("difficulty").value = "easy";
+  handleQuestionTypeChange();
+}
 
 // Додавання обробника подій для кнопки додавання питання
 document.addEventListener("DOMContentLoaded", () => {
@@ -116,9 +105,9 @@ function handleQuestionTypeChange() {
     for (let i = 0; i < 4; i++) {
       // Наприклад, 4 варіанти відповідей
       const optionDiv = document.createElement("div");
-      optionDiv.innerHTML = ` <label for="option${i}">Варіант ${
+      optionDiv.innerHTML = ` <div class="option"><label class="var-label" for="option${i}">Варіант ${
         i + 1
-      }:</label> <input type="text" class="option" id="option${i}" data-correct="false"> <input type="checkbox" class="correctCheckbox" id="option${i}Correct"> Правильний `;
+      }:</label> <input type="text" class="option" id="option${i}" data-correct="false"> <div class="checkbox-container"><input type="checkbox" class="correctCheckbox" id="option${i}Correct"><label for="option${i}Correct"> Правильний </label></div></div>`;
       optionsContainer.appendChild(optionDiv);
     }
 
@@ -136,6 +125,7 @@ function handleQuestionTypeChange() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  handleQuestionTypeChange();
   document
     .getElementById("questionType")
     .addEventListener("change", handleQuestionTypeChange);

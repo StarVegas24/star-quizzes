@@ -34,13 +34,20 @@ async function loadFolders(uid) {
     collection(db, "teachers", uid, "folders")
   );
   const foldersContainer = document.getElementById("folders");
-  querySnapshot.forEach((doc) => {
-    const folder = doc.data();
-    const folderElement = document.createElement("div");
-    folderElement.className = "folder";
-    folderElement.innerHTML = `<a href="folder.html?uid=${uid}&folderId=${doc.id}">${folder.name}</a>`;
-    foldersContainer.appendChild(folderElement);
-  });
+  console.log(querySnapshot._doc);
+  if (querySnapshot._docs) {
+    querySnapshot.forEach((doc) => {
+      const folder = doc.data();
+      const folderElement = document.createElement("div");
+      folderElement.className = "folder";
+      folderElement.innerHTML = `<a class="folder-link" href="folder.html?uid=${uid}&folderId=${doc.id}">${folder.name}</a>`;
+      foldersContainer.appendChild(folderElement);
+    });
+  } else {
+    const notFoundElement = document.createElement("h5");
+    notFoundElement.textContent = "Ви ще не створили жодного питання...";
+    foldersContainer.appendChild(notFoundElement);
+  }
 }
 
 // Додавання обробника подій для кнопки додавання тесту
