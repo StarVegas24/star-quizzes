@@ -62,11 +62,19 @@ async function submitTest() {
   const testId = new URLSearchParams(window.location.search).get("testId");
   const lastName = document.getElementById("lastName").value;
   const firstName = document.getElementById("firstName").value;
+
+  if (lastName.length < 3 || firstName.length < 3) {
+    alert("Вкажіть прізвище та імʼя!");
+    return;
+  }
+
   const selectedAnswers = Array.from(
     document.querySelectorAll('input[type="checkbox"]:checked')
   ).map((checkbox) => checkbox.value);
-  let correctAnswersCount = 0;
+
+  let score = 0;
   let totalQuestions = 0;
+  const results = [];
   try {
     const testDoc = await getDoc(doc(db, "tests", testId));
     if (testDoc.exists()) {
@@ -91,21 +99,41 @@ async function submitTest() {
             if (option.correct && selectedAnswers.includes(option.text)) {
               questionScore++;
             }
+            if (!option.correct && selectedAnswers.includes(option.text)) {
+              questionScore -= 0.5;
+            }
           }
-          correctAnswersCount += Math.min(questionScore, 1); // Максимум одна правильна відповідь за питання
+
+          if (questionScore < 0) {
+            questionScore = 0;
+          }
+
+          score += questionScore;
+          results.push({
+            questionId,
+            questionScore,
+          });
         }
       }
     }
-    const score = (correctAnswersCount / totalQuestions) * 12;
+
+    const result = (score / results.length) * 12;
+
+    document.querySelectorAll("input").forEach((input) => {
+      input.disabled = true;
+    });
+
     document.getElementById("result").innerHTML = `Ви отримали ${Math.round(
-      score
+      result
     )} балів з 12 можливих.`;
+
     await setDoc(doc(collection(db, "testResults")), {
       testId: testId,
       lastName: lastName,
       firstName: firstName,
-      score: Math.round(score),
+      score: Math.round(result),
       submittedAt: new Date(),
+      results: results,
     });
   } catch (error) {
     console.error(

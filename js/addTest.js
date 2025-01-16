@@ -57,14 +57,12 @@ function handleAddQuestion() {
   const folder = document.getElementById("folder").value;
   const questionClass = document.getElementById("class").value;
   const difficulty = document.getElementById("difficulty").value;
-  const manualCheck = document.getElementById("manualCheck").checked;
   const question = {
     text: questionText,
     type: questionType,
     folder: folder,
     class: questionClass,
     difficulty: difficulty,
-    manualCheck: manualCheck,
     options: [], // Додаткові поля для варіантів відповідей в залежності від типу питання
   };
 
@@ -80,6 +78,28 @@ function handleAddQuestion() {
   }
   addQuestion(question);
 }
+
+// function handleAddQuestion() {
+//   const questionType = document.getElementById("questionType").value;
+//   const question = {
+//     text: document.getElementById("questionText").value,
+//     type: questionType,
+//     folder: document.getElementById("folder").value,
+//     class: document.getElementById("class").value,
+//     difficulty: document.getElementById("difficulty").value,
+//     options: [],
+//   };
+//   if (questionType === "oneCorrect" || questionType === "multipleCorrect") {
+//     const options = document.getElementsByClassName("option");
+//     for (const option of options) {
+//       question.options.push({
+//         text: option.value,
+//         correct: option.dataset.correct === "true",
+//       });
+//     }
+//   }
+//   addQuestion(question);
+// }
 
 // Додавання обробника подій для кнопки додавання питання
 document.addEventListener("DOMContentLoaded", () => {

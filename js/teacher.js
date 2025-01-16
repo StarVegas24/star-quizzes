@@ -68,5 +68,9 @@ function logout() {
     });
 }
 
+document.getElementById("resultsBtn").addEventListener("click", () => {
+  window.location.href = `testResults.html?uid=${uid}`;
+});
+
 // Додавання обробника подій для кнопки виходу
 document.getElementById("logoutBtn").addEventListener("click", logout);

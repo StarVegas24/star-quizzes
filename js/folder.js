@@ -76,16 +76,3 @@ document.addEventListener("DOMContentLoaded", () => {
     .getElementById("createTestBtn")
     .addEventListener("click", createTest);
 });
-
-document.addEventListener("DOMContentLoaded", () => {
-  const uid = new URLSearchParams(window.location.search).get("uid");
-  const folderId = new URLSearchParams(window.location.search).get("folderId");
-  if (uid && folderId) {
-    loadQuestions(uid, folderId);
-  } else {
-    alert("Параметри URL не вказані.");
-  }
-  document
-    .getElementById("createTestBtn")
-    .addEventListener("click", createTest);
-});

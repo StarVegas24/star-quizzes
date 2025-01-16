@@ -39,7 +39,6 @@ async function googleSignIn() {
   }
 }
 
-// Функція для реєстрації через електронну пошту
 async function emailSignUp(email, password, role) {
   console.log(`Sign up (email) ${email} ${password} ${role}`);
   try {
@@ -49,9 +48,17 @@ async function emailSignUp(email, password, role) {
       password
     );
     const user = userCredential.user;
+
     // Збереження ролі користувача в Firestore
     await setDoc(doc(db, "users", user.uid), { role });
-    handleUserRedirect(user, role);
+
+    // Зчитування даних з Firestore для перенаправлення
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+      handleUserRedirect(user);
+    } else {
+      console.error("Роль користувача не збережено.");
+    }
   } catch (error) {
     console.error(error);
   }
@@ -67,24 +74,36 @@ async function emailSignIn(email, password) {
       password
     );
     const user = userCredential.user;
-    handleUserRedirect(user);
+
+    // Зчитування ролі з Firestore перед перенаправленням
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+      handleUserRedirect(user);
+    } else {
+      console.error("Користувача не знайдено в базі даних.");
+    }
   } catch (error) {
     console.error(error);
   }
 }
+
 // Функція для перенаправлення користувача на відповідну сторінку
 async function handleUserRedirect(user) {
-  console.log(`Redicret ${user}`);
+  console.log(`Redirecting user: ${user.uid}`);
   const userDoc = await getDoc(doc(db, "users", user.uid));
+
   if (userDoc.exists()) {
     const role = userDoc.data().role;
+
     if (role === "teacher") {
       window.location.href = `teacher.html?uid=${user.uid}`;
     } else if (role === "student") {
       window.location.href = `student.html?uid=${user.uid}`;
+    } else {
+      alert("Невідома роль користувача.");
     }
   } else {
-    alert("Користувача не знайдено в базі даних");
+    alert("Користувача не знайдено в базі даних.");
   }
 }
 
@@ -96,6 +115,7 @@ document.getElementById("emailSignUpBtn").addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const role = document.querySelector('input[name="role"]:checked').value;
+  console.log(role);
   emailSignUp(email, password, role);
 });
 document.getElementById("emailSignInBtn").addEventListener("click", () => {
