@@ -14,7 +14,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Функція для додавання папки до Firestore, якщо вона не існує
 async function addFolderIfNotExists(uid, folderName) {
   const folderDocRef = doc(db, "teachers", uid, "folders", folderName);
   const folderDoc = await getDoc(folderDocRef);
@@ -34,7 +33,6 @@ async function addUserIfNotExists(uid) {
   }
 }
 
-// Функція для додавання питання до Firestore
 async function addQuestion(question) {
   try {
     const uid = new URLSearchParams(window.location.search).get("uid");

@@ -35,7 +35,6 @@ input[type="checkbox"] {
   display: block;
   width: 28px;
   height: 28px;
-  padding: 6px;
   margin-bottom: 0;
 }
 
@@ -44,7 +43,6 @@ label {
   font-size: inherit;
   display: block;
   width: 100%;
-  margin-bottom: 8px;
 }
 
 button {

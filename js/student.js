@@ -12,7 +12,7 @@ const auth = getAuth(app);
 function logout() {
   signOut(auth)
     .then(() => {
-      window.location.href = "auth.html"; // Перенаправлення на сторінку входу після виходу
+      window.location.replace("auth.html"); // Перенаправлення на сторінку входу після виходу
     })
     .catch((error) => {
       console.error("Помилка при виході: ", error);

@@ -19,20 +19,22 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
-// Функція для входу через Google
+async function changeRole(user) {
+  let role = "";
+  do {
+    role = prompt("Виберіть свою роль: вчитель (teacher) або учень (student)");
+  } while (role !== "teacher" && role !== "student");
+  await setDoc(doc(db, "users", user.uid), { role });
+}
+
 async function googleSignIn() {
-  console.log(`Sign in/up (google)`);
   try {
     const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user; // Перевірка, чи існує користувач у базі даних
+    const user = result.user;
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (!userDoc.exists()) {
-      // Якщо користувача не існує, реєструємо його
-      const role = prompt(
-        "Виберіть свою роль: вчитель (teacher) або учень (student)"
-      ); // Або можна реалізувати інший спосіб вибору ролі
-      await setDoc(doc(db, "users", user.uid), { role });
-    } // Перенаправлення користувача після успішного входу
+      await changeRole(user);
+    }
     handleUserRedirect(user);
   } catch (error) {
     console.error(error);
@@ -47,12 +49,9 @@ async function emailSignUp(email, password, role) {
       email,
       password
     );
+    // console.log(userCredential);
     const user = userCredential.user;
-
-    // Збереження ролі користувача в Firestore
     await setDoc(doc(db, "users", user.uid), { role });
-
-    // Зчитування даних з Firestore для перенаправлення
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (userDoc.exists()) {
       handleUserRedirect(user);
@@ -64,7 +63,6 @@ async function emailSignUp(email, password, role) {
   }
 }
 
-// Функція для входу через електронну пошту
 async function emailSignIn(email, password) {
   console.log(`Sign in (email) ${email} ${password}`);
   try {
@@ -74,16 +72,14 @@ async function emailSignIn(email, password) {
       password
     );
     const user = userCredential.user;
-
-    // Зчитування ролі з Firestore перед перенаправленням
     const userDoc = await getDoc(doc(db, "users", user.uid));
     if (userDoc.exists()) {
       handleUserRedirect(user);
     } else {
-      console.error("Користувача не знайдено в базі даних.");
+      changeRole(user);
     }
   } catch (error) {
-    console.error(error);
+    alert("Ви ввели неправильний логін або пароль");
   }
 }
 
@@ -96,28 +92,31 @@ async function handleUserRedirect(user) {
     const role = userDoc.data().role;
 
     if (role === "teacher") {
-      window.location.href = `teacher.html?uid=${user.uid}`;
+      window.location.replace(`teacher.html?uid=${user.uid}`);
     } else if (role === "student") {
-      window.location.href = `student.html?uid=${user.uid}`;
+      window.location.replace(`student.html?uid=${user.uid}`);
     } else {
       alert("Невідома роль користувача.");
+      changeRole(user);
+      handleUserRedirect(user);
     }
   } else {
     alert("Користувача не знайдено в базі даних.");
   }
 }
 
-// Додавання обробників подій для кнопок
 document
   .getElementById("googleSignInBtn")
   .addEventListener("click", googleSignIn);
+
 document.getElementById("emailSignUpBtn").addEventListener("click", () => {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const role = document.querySelector('input[name="role"]:checked').value;
-  console.log(role);
+  // console.log(role);
   emailSignUp(email, password, role);
 });
+
 document.getElementById("emailSignInBtn").addEventListener("click", () => {
   const email = document.getElementById("emailLogin").value;
   const password = document.getElementById("passwordLogin").value;

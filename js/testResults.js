@@ -13,19 +13,19 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Видалення тесту
 async function deleteTest(testId) {
   if (confirm("Ви впевнені, що хочете видалити це тестування?")) {
     try {
       await deleteDoc(doc(db, "tests", testId));
       alert("Тестування видалено успішно.");
       location.reload();
-      // Оновлення сторінки після видалення
     } catch (error) {
       console.error("Помилка видалення тесту:", error);
     }
   }
 }
+
+deleteTest;
 
 // Завантаження списку тестувань
 async function loadTests(uid) {

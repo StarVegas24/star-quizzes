@@ -17,7 +17,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Перевірка рівня доступу користувача
 async function checkAccess(uid) {
   const userDoc = await getDoc(doc(db, "users", uid));
   if (userDoc.exists() && userDoc.data().role === "teacher") {
