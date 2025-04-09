@@ -13,6 +13,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+async function checkAccess(uid) {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  if (!userDoc.exists() || userDoc.data().role !== "teacher") {
+    alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
+    location.replace("auth.html");
+  }
+}
+
+let user = localStorage.getItem("user");
+if (user) {
+  user = JSON.parse(user);
+  const uid = user.uid;
+  if (uid) {
+    checkAccess(uid);
+  }
+} else {
+  alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
+  location.replace("auth.html");
+}
+
 // Завантаження питань з папки
 async function loadQuestions(uid, folderId) {
   const querySnapshot = await getDocs(
@@ -48,7 +68,7 @@ async function loadQuestions(uid, folderId) {
 
 // Створення тестування
 async function createTest() {
-  const uid = new URLSearchParams(window.location.search).get("uid");
+  const uid = user.uid;
   const folderId = new URLSearchParams(window.location.search).get("folderId");
   const selectedQuestions = Array.from(
     document.getElementsByClassName("select-question")
@@ -72,7 +92,7 @@ async function createTest() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const uid = new URLSearchParams(window.location.search).get("uid");
+  const uid = user.uid;
   const folderId = new URLSearchParams(window.location.search).get("folderId");
   if (uid && folderId) {
     loadQuestions(uid, folderId);

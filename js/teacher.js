@@ -33,13 +33,13 @@ async function loadFolders(uid) {
     collection(db, "teachers", uid, "folders")
   );
   const foldersContainer = document.getElementById("folders");
-  console.log(querySnapshot._doc);
+  // console.log(querySnapshot._docs);
   if (querySnapshot._docs) {
     querySnapshot.forEach((doc) => {
       const folder = doc.data();
       const folderElement = document.createElement("div");
       folderElement.className = "folder";
-      folderElement.innerHTML = `<a class="folder-link" href="folder.html?uid=${uid}&folderId=${doc.id}">${folder.name}</a>`;
+      folderElement.innerHTML = `<a class="folder-link" href="folder.html?folderId=${doc.id}">${folder.name}</a>`;
       foldersContainer.appendChild(folderElement);
     });
   } else {
@@ -49,34 +49,38 @@ async function loadFolders(uid) {
   }
 }
 
-// Додавання обробника подій для кнопки додавання тесту
-document.getElementById("addTestBtn").addEventListener("click", () => {
-  const uid = new URLSearchParams(window.location.search).get("uid");
-  window.location.href = `addTest.html?uid=${uid}`;
-});
-
 // Отримання uid користувача з URL
-const uid = new URLSearchParams(window.location.search).get("uid");
-if (uid) {
-  checkAccess(uid);
+let user = localStorage.getItem("user");
+if (user) {
+  user = JSON.parse(user);
+  // console.log(user);
+  const uid = user.uid;
+  if (uid) {
+    checkAccess(uid);
+  }
 } else {
   document.getElementById("error").style.display = "block";
 }
+
+// Додавання обробника подій для кнопки додавання тесту
+document
+  .getElementById("addTestBtn")
+  .addEventListener("click", () => window.location.replace(`addTest.html`));
+
+document
+  .getElementById("resultsBtn")
+  .addEventListener("click", () => window.location.replace(`testResults.html`));
 
 // Функція для виходу користувача
 function logout() {
   signOut(auth)
     .then(() => {
-      window.location.href = "auth.html"; // Перенаправлення на сторінку входу після виходу
+      window.location.replace("auth.html"); // Перенаправлення на сторінку входу після виходу
     })
     .catch((error) => {
       console.error("Помилка при виході: ", error);
     });
 }
-
-document.getElementById("resultsBtn").addEventListener("click", () => {
-  window.location.href = `testResults.html?uid=${uid}`;
-});
 
 // Додавання обробника подій для кнопки виходу
 document.getElementById("logoutBtn").addEventListener("click", logout);

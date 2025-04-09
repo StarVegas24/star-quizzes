@@ -90,11 +90,12 @@ async function handleUserRedirect(user) {
 
   if (userDoc.exists()) {
     const role = userDoc.data().role;
+    localStorage.setItem("user", JSON.stringify({ ...user, role }));
 
     if (role === "teacher") {
-      window.location.replace(`teacher.html?uid=${user.uid}`);
+      window.location.replace(`teacher.html`);
     } else if (role === "student") {
-      window.location.replace(`student.html?uid=${user.uid}`);
+      window.location.replace(`student.html`);
     } else {
       alert("Невідома роль користувача.");
       changeRole(user);

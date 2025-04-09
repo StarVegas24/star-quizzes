@@ -13,6 +13,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+async function checkAccess(uid) {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  if (!userDoc.exists() || userDoc.data().role !== "teacher") {
+    alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
+    location.replace("auth.html");
+  }
+}
+
+let user = localStorage.getItem("user");
+if (user) {
+  user = JSON.parse(user);
+  const uid = user.uid;
+  if (uid) {
+    checkAccess(uid);
+  }
+} else {
+  alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
+  location.replace("auth.html");
+}
+
 async function deleteTest(testId) {
   if (confirm("Ви впевнені, що хочете видалити це тестування?")) {
     try {

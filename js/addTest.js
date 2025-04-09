@@ -14,6 +14,26 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+async function checkAccess(uid) {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  if (!userDoc.exists() || userDoc.data().role !== "teacher") {
+    alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
+    location.replace("auth.html");
+  }
+}
+
+let user = localStorage.getItem("user");
+if (user) {
+  user = JSON.parse(user);
+  const uid = user.uid;
+  if (uid) {
+    checkAccess(uid);
+  }
+} else {
+  alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
+  location.replace("auth.html");
+}
+
 async function addFolderIfNotExists(uid, folderName) {
   const folderDocRef = doc(db, "teachers", uid, "folders", folderName);
   const folderDoc = await getDoc(folderDocRef);
@@ -35,7 +55,7 @@ async function addUserIfNotExists(uid) {
 
 async function addQuestion(question) {
   try {
-    const uid = new URLSearchParams(window.location.search).get("uid");
+    const uid = user.uid;
     await addUserIfNotExists(uid);
     await addFolderIfNotExists(uid, question.folder);
     await addDoc(
@@ -49,7 +69,9 @@ async function addQuestion(question) {
 }
 
 // Функція для обробки форми додавання питання
-function handleAddQuestion() {
+function handleAddQuestion(event) {
+  event.preventDefault();
+
   const questionText = document.getElementById("questionText").value;
   const questionType = document.getElementById("questionType").value;
   const folder = document.getElementById("folder").value;
@@ -63,13 +85,13 @@ function handleAddQuestion() {
     difficulty: difficulty,
     options: [], // Додаткові поля для варіантів відповідей в залежності від типу питання
   };
-  console.log(question);
+  // console.log(question);
 
   // Додавання додаткових варіантів відповідей в залежності від типу питання
   if (questionType === "oneCorrect" || questionType === "multipleCorrect") {
     const options = document.getElementsByClassName("option");
     for (const option of options) {
-      if (option.value == undefined) {
+      if (option.value == undefined || option.value == "") {
         continue;
       }
       question.options.push({
@@ -79,7 +101,13 @@ function handleAddQuestion() {
     }
   }
 
+  if (question.options.length == 0) {
+    alert("Має бути хоча б один варіант відповідей");
+    return;
+  }
+
   addQuestion(question);
+
   document.getElementById("questionText").value = "";
   document.getElementById("questionType").value = undefined;
   document.getElementById("class").value = "";
@@ -87,13 +115,6 @@ function handleAddQuestion() {
   document.getElementById("difficulty").value = "easy";
   handleQuestionTypeChange();
 }
-
-// Додавання обробника подій для кнопки додавання питання
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("addQuestionBtn")
-    .addEventListener("click", handleAddQuestion);
-});
 
 function handleQuestionTypeChange() {
   const questionType = document.getElementById("questionType").value;
@@ -127,4 +148,9 @@ document.addEventListener("DOMContentLoaded", () => {
   document
     .getElementById("questionType")
     .addEventListener("change", handleQuestionTypeChange);
+});
+
+// Додавання обробника подій для кнопки додавання питання
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelector("form").addEventListener("submit", handleAddQuestion);
 });
