@@ -10,29 +10,14 @@ import {
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore-lite.js";
 
+import { checkAccess } from "./helpers.js";
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-async function checkAccess(uid) {
-  const userDoc = await getDoc(doc(db, "users", uid));
-  if (!userDoc.exists() || userDoc.data().role !== "teacher") {
-    alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
-    location.replace("auth.html");
-  }
-}
-
-let user = localStorage.getItem("user");
-if (user) {
-  user = JSON.parse(user);
-  const uid = user.uid;
-  if (uid) {
-    checkAccess(uid);
-  }
-} else {
-  alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
-  location.replace("auth.html");
-}
+let user = JSON.parse(localStorage.getItem("user") || "null");
+checkAccess(user, db);
 
 async function addFolderIfNotExists(uid, folderName) {
   const folderDocRef = doc(db, "teachers", uid, "folders", folderName);
@@ -107,13 +92,14 @@ function handleAddQuestion(event) {
   }
 
   addQuestion(question);
+  location.replace("teacher.html");
 
-  document.getElementById("questionText").value = "";
-  document.getElementById("questionType").value = undefined;
-  document.getElementById("class").value = "";
-  document.getElementById("folder").value = "";
-  document.getElementById("difficulty").value = "easy";
-  handleQuestionTypeChange();
+  // document.getElementById("questionText").value = "";
+  // document.getElementById("questionType").value = undefined;
+  // document.getElementById("class").value = "";
+  // document.getElementById("folder").value = "";
+  // document.getElementById("difficulty").value = "easy";
+  // handleQuestionTypeChange();
 }
 
 function handleQuestionTypeChange() {

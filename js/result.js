@@ -9,9 +9,14 @@ import {
   query,
   where,
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore-lite.js";
+import { checkAccess } from "./helpers.js";
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
+
+let user = JSON.parse(localStorage.getItem("user") || "null");
+checkAccess(user, db);
 
 // Завантаження тексту питань за їх ID
 async function getQuestionText(test) {

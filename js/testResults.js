@@ -8,30 +8,14 @@ import {
   doc,
   getDoc,
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore-lite.js";
+import { checkAccess } from "./helpers.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-async function checkAccess(uid) {
-  const userDoc = await getDoc(doc(db, "users", uid));
-  if (!userDoc.exists() || userDoc.data().role !== "teacher") {
-    alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
-    location.replace("auth.html");
-  }
-}
-
-let user = localStorage.getItem("user");
-if (user) {
-  user = JSON.parse(user);
-  const uid = user.uid;
-  if (uid) {
-    checkAccess(uid);
-  }
-} else {
-  alert("Ви не ввійшли у свій акаунт або у вас немає прав доступу!");
-  location.replace("auth.html");
-}
+let user = JSON.parse(localStorage.getItem("user") || "null");
+checkAccess(user, db);
 
 async function deleteTest(testId) {
   if (confirm("Ви впевнені, що хочете видалити це тестування?")) {
@@ -44,8 +28,6 @@ async function deleteTest(testId) {
     }
   }
 }
-
-deleteTest;
 
 // Завантаження списку тестувань
 async function loadTests(uid) {
@@ -67,7 +49,7 @@ async function loadTests(uid) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const uid = new URLSearchParams(window.location.search).get("uid");
+  const uid = user.uid;
   if (uid) {
     loadTests(uid);
   } else {

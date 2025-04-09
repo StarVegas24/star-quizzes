@@ -13,3 +13,17 @@
   text-align: left;
   font-size: 20px;
 }
+
+.test-label {
+  margin-bottom: 12px;
+}
+
+div.question {
+  padding-bottom: 8px;
+  margin-bottom: 32px;
+}
+
+div.question:not(:last-child) {
+  border-bottom: 1.5px solid rgb(180, 180, 180);
+  padding-bottom: 32px;
+}

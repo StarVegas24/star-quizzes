@@ -12,20 +12,11 @@ import {
   collection,
   getDocs,
 } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore-lite.js";
+import { checkAccess } from "./helpers.js";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-async function checkAccess(uid) {
-  const userDoc = await getDoc(doc(db, "users", uid));
-  if (userDoc.exists() && userDoc.data().role === "teacher") {
-    document.getElementById("content").style.display = "block";
-    loadFolders(uid);
-  } else {
-    document.getElementById("error").style.display = "block";
-  }
-}
 
 // Завантаження папок з питаннями
 async function loadFolders(uid) {
@@ -50,14 +41,11 @@ async function loadFolders(uid) {
 }
 
 // Отримання uid користувача з URL
-let user = localStorage.getItem("user");
+let user = JSON.parse(localStorage.getItem("user") || "null");
 if (user) {
-  user = JSON.parse(user);
-  // console.log(user);
-  const uid = user.uid;
-  if (uid) {
-    checkAccess(uid);
-  }
+  checkAccess(user, db);
+  document.getElementById("content").style.display = "block";
+  loadFolders(user.uid);
 } else {
   document.getElementById("error").style.display = "block";
 }
@@ -75,6 +63,7 @@ document
 function logout() {
   signOut(auth)
     .then(() => {
+      localStorage.removeItem("user");
       window.location.replace("auth.html"); // Перенаправлення на сторінку входу після виходу
     })
     .catch((error) => {

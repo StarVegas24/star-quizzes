@@ -17,7 +17,7 @@ async function loadTest(testId) {
     const testDoc = await getDoc(doc(db, "tests", testId));
     if (testDoc.exists()) {
       const test = testDoc.data();
-      console.log("Тест:", test); // Додано журнал налагодження
+      // console.log("Тест:", test); // Додано журнал налагодження
       const questionsContainer = document.getElementById("questions");
       for (const questionId of test.questions) {
         const questionDoc = await getDoc(
@@ -53,9 +53,12 @@ async function loadTest(testId) {
       }
     } else {
       console.log(`Тест з ID ${testId} не знайдено`); // Додано журнал налагодження
+      location.replace("/index.html");
     }
   } catch (error) {
     console.error("Помилка завантаження тесту:", error); // Додано журнал налагодження
+    alert("Помилка завантаження тесту");
+    location.replace("/index.html");
   }
 }
 
@@ -150,7 +153,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (testId) {
     loadTest(testId);
   } else {
-    alert("Параметр тесту не вказаний.");
+    location.replace("/index.html");
   }
   document
     .getElementById("submitTestBtn")

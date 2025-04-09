@@ -19,6 +19,15 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 const googleProvider = new GoogleAuthProvider();
 
+let user = JSON.parse(localStorage.getItem("user") || "null");
+if (user) {
+  if (user.role == "teacher") {
+    location.replace("teacher.html");
+  } else if (user.role == "student") {
+    location.replace("student.html");
+  }
+}
+
 async function changeRole(user) {
   let role = "";
   do {
